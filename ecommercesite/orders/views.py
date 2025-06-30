@@ -3,15 +3,15 @@ from cart.models import Cart
 from .forms import orderCreateForm
 from .models import OrderItem, Order
 
-# Create your views here.
+
 def order_create(request):
     cart = None
     cart_id = request.session.get('cart_id')
 
     if cart_id:
-        cart = Cart.object.get(id=cart_id)
+        cart = Cart.objects.get(id=cart_id)
 
-        if not cart or not cart.item.exists():
+        if not cart or not cart.items.exists():
             return redirect("cart:cart_detail")
     if request.method == "POST":
         form = orderCreateForm(request.POST)
@@ -21,18 +21,19 @@ def order_create(request):
 
             for item in cart.items.all():
                 OrderItem.objects.create(
-                    order = order,
-                    product = item.product,
-                    price = item.product.price,
-                    quantity = item.quantity,
+                    order=order,
+                    product=item.product,
+                    price=item.product.price,
+                    quantity=item.quantity,
                 )
-                cart.delete()
-                del request.session["cart_id"]
-                return redirect("orders:order_confirmation", order.id)
+            cart.delete()
+            del request.session["cart_id"]
+            return redirect("orders:order_confirmation", order.id)
         else:
             form = orderCreateForm()
-        return render(request, "order/order_create.html", {"cart": cart, "form": form})
-        
-def order_confirmation(request, Order_id):
-    order = get_object_or_404(Order, id=Order_id)
+        return render(request, "orders/order_create.html", {"cart": cart, "form": form})
+
+
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
     return render(request, "orders/order_confirmation.html", {"order": order})

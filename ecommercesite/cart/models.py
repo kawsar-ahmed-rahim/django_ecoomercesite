@@ -6,7 +6,7 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_total_price(self):
-        return sum(item.get_total_price() for item in self.items.all)
+        return sum(item.get_total_price() for item in self.items.all())
 
 
 class CartItem(models.Model):
@@ -16,3 +16,4 @@ class CartItem(models.Model):
 
     def get_total_price(self):
         return self.product.price * self.quantity
+    

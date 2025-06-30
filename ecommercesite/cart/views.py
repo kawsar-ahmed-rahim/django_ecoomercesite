@@ -18,11 +18,12 @@ def cart_add(request, product_id):
         cart = Cart.objects.create()
         request.session['cart_id'] = cart.id
 
-    product = get_list_or_404(Product, id=product_id)
+    product = get_object_or_404(Product, id=product_id)
+    
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
     if not created:
-        cart_item.quantity +=1
+        cart_item.quantity += 1
 
     cart_item.save()
 
@@ -38,7 +39,7 @@ def cart_detail(request):
     cart = None
 
     if cart_id:
-        cart = get_object_or_404(cart, id=cart_id)
+        cart = get_object_or_404(Cart, id=cart_id)
     if not cart or not cart.items.exists():
         cart = None
 

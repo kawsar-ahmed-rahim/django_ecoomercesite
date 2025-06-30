@@ -25,10 +25,10 @@
 </div>
 <script>
     document.getElementById('add-to-cart-form').addEventListener("submit", function(event){
-        event.preventDefault():
+        event.preventDefault();
 
         const form = event.target;
-        const url = event.action;
+        const url = form.action;
         const formData = new FormData(form);
 
         fetch(url, {
@@ -38,13 +38,13 @@
             },
             body:formData
         })
-        .then(response=>response.json())
+        .then(response => response.json())
         .then(data=>{
             const messageElement = document.getElementById("message");
             if (data.success){
                 messageElement.textContent = data.message;
             }else{
-                message.textContent = "Failed to add to cart"
+                messageElement.textContent = "Failed to add to cart"
             }
         })
         .catch(error=>{

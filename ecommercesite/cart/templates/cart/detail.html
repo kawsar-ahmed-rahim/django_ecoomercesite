@@ -21,7 +21,7 @@
            <p class="text-gray-600">Quantity: {{item.quantity}}</p>
 
         <div class="flex-shrink">
-            <form action="{5 url 'cart:remove_item' item.id %}" method="post">
+            <form action="{% url 'cart:remove_item' item.id %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="bg-red-600 text-white px-4 py-1  text-xs rounded">X</button>
             </form>
@@ -34,7 +34,8 @@
 {% else %}
 <p>Your Cart is empty.</p>
 {% endif %}
-<form action="">
-    <button class="bg-indigo-600 text-white px-4 py-2 rounded mt-0.5">Procced to Checkout</button>
+<form action="{% url 'orders:order_create' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded mt-0.5">Procced to Checkout</button>
 </form>
 {% endblock %}
